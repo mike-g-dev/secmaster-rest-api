@@ -4,23 +4,6 @@ Executable FastApi REST API script.
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-EQUITIES = [
-    {
-        "ticker": "AAPL",
-        "open_price": 123.4,
-        "close_price": 124.0
-    },
-    {
-        "ticker": "MSFT",
-        "open_price": 123.4,
-        "close_price": 124.0
-    },
-    {
-        "ticker": "TSLA",
-        "open_price": 123.4,
-        "close_price": 124.0
-    }
-]
 
 INDICIES = [
     {
@@ -45,6 +28,25 @@ class Equity(BaseModel):
     ticker: str
     open_price: float
     close_price: float
+
+
+EQUITIES = [
+    Equity(**{
+        "ticker": "AAPL",
+        "open_price": 123.4,
+        "close_price": 124.0
+    }),
+    Equity(**{
+        "ticker": "MSFT",
+        "open_price": 123.4,
+        "close_price": 124.0
+    }),
+    Equity(**{
+        "ticker": "TSLA",
+        "open_price": 123.4,
+        "close_price": 124.0
+    })
+]
 
 
 def get_application() -> FastAPI:
@@ -83,7 +85,7 @@ async def get_all_eod_data(skip: int = 0, limit: int = 10):
 
 @app.get("/eod/equity/{ticker}")
 async def get_eod_ticker(ticker: str):
-    data = [row for row in EQUITIES if row["ticker"] == ticker]
+    data = [row for row in EQUITIES if row.ticker == ticker]
     return {
         "data": data,
         "response_code": 200 if data else 404
@@ -92,14 +94,20 @@ async def get_eod_ticker(ticker: str):
 
 @app.get("/eod/indicies/{ticker}")
 async def get_eod_ticker(ticker: str):
-    data = [row for row in INDICIES if row["ticker"] == ticker]
+    data = [row for row in INDICIES if row.ticker == ticker]
     return {
         "data": data,
         "response_code": 200 if data else 404
     }
 
 
-@app.post("/eod/equity/")
+@app.put("/eod/equity/")
 async def create_equity_record(equity: Equity):
-    EQUITIES.append(equity.json())
+    EQUITIES.append(equity)
+    return equity
+
+
+@app.put("/eod/indicies/")
+async def create_index_record(equity: Equity):
+    INDICIES.append(equity)
     return equity
