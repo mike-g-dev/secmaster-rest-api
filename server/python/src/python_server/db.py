@@ -1,5 +1,13 @@
 from typing import List, Dict
 
+ALL_TICKERS = [
+    "AAPL",
+    "MSFT",
+    "SPX",
+    "VIX",
+    "FB",
+    "QQQ"
+]
 
 FAKE_EQUITY_EOD_DB = [
     {
@@ -26,5 +34,6 @@ def get_equity_records(ticker: str, date: str) -> List[Dict]:
         if record["ticker"] == ticker and record["market_date"] == date
     ]
 
-def get_all_tickers(as_of: str):
-    return set([x["ticker"] for x in FAKE_EQUITY_EOD_DB])
+
+def get_all_tickers(as_of: str = "") -> List[str]:
+    return ALL_TICKERS
