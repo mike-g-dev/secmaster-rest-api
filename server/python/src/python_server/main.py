@@ -10,6 +10,7 @@ async def get_all_tickers(as_of: str = ""):
     return db.get_all_tickers(as_of=as_of)
 
 
+# TODO: create response model
 @app.post("/equity/eod/{ticker}")
 async def get_equity_eod(ticker: str, market_date: str = ""):
     return db.get_equity_records(ticker=ticker, date=market_date)
